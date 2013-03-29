@@ -84,7 +84,8 @@ class file extends atoum\writer implements writers\realtime, writers\asynchronou
 				throw  new exceptions\runtime('Unable to open file \'' . $this->filename . '\'');
 			}
 
-			if ($this->adapter->flock($this->resource, LOCK_SH) === false)
+			$lock_type = ($this->adapter->defined('PHP_WINDOWS_VERSION_BUILD')) ? LOCK_EX : LOCK_SH;
+			if ($this->adapter->flock($this->resource, $lock_type) === false)
 			{
 				throw  new exceptions\runtime('Unable to lock file \'' . $this->filename . '\'');
 			}
